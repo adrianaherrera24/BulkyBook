@@ -1,6 +1,7 @@
 using BulkyBook.DataAccess;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
 ));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Create object of the interface to be used in the controller side
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -33,8 +37,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Authentication is always before the Authorizacion middleware if not it won't work
+// 1. Authentication 2. Authorization, order if you use both
+app.UseAuthentication();
 app.UseAuthorization();
 
+// To use the right routes for the identity razor pages
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
