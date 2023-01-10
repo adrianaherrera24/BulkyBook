@@ -1,0 +1,70 @@
+﻿@model BulkyBook.Models.Company
+
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <input asp-for="Id" hidden />
+
+    <div class="row">
+        <div class="col-10">
+            <div class="border p-3 mt-4 row">
+                <div class="col-12 pb-2">
+                    <h2 class="text-primary">@(Model.Id != 0 ? "Update" : "Create") Company</h2>
+                    <hr />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Name"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="Name" class="form-control"  /> 
+                   <span asp-validation-for="Name" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="PhoneNumber" rows="3" class="form-control"/>
+                   <span asp-validation-for="PhoneNumber" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="mb-3 col-6">
+                    <label asp-for="StreetAddress"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="StreetAddress" class="form-control"  /> 
+                   <span asp-validation-for="StreetAddress" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="mb-3 col-6">
+                    <label asp-for="City"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="City" class="form-control"  /> 
+                   <span asp-validation-for="City" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="mb-3 col-6">
+                    <label asp-for="State"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="State" class="form-control"  /> 
+                   <span asp-validation-for="State" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="mb-3 col-6">
+                    <label asp-for="PostalCode"></label> @* asp-for allow us to use any property of the model *@
+                    <input asp-for="PostalCode" class="form-control"  /> 
+                   <span asp-validation-for="PostalCode" class="text-danger"></span> @* To get the error message for invalid ModelState *@
+                </div>
+
+                <div class="col-12">
+                    @if(Model.Id != 0) {
+                        <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
+                    }else {
+                        <button type="submit" onclick="return ValidateInput()" class="btn btn-primary" style="width:150px">Create</button>
+                    }
+                    <a asp-area="Admin" asp-controller="Company" asp-action="Index" class="btn btn-primary">Back To List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@* This partial view adds jquery to use form validations in the client side (without reloading the page)
+ instead of the server-side validations that needs to reload the page.
+*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
