@@ -1,9 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http @*To use sessions*@
+@using BulkyBook.Utility
+
+@inject IHttpContextAccessor HttpContextAccesor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BulkyBookWeb</title>
+    <title>Bulky Book</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/bootstrapTheme.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -17,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <p class="navbar-brand">Bulky Books</p>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -26,24 +31,26 @@
                 <li class="nav-item">
                     <a class="nav-link active" asp-area="Customer" asp-controller="Home" asp-action="Index">Home<span class="visually-hidden">(current)</span></a>
                 </li>
+                @if(User.IsInRole(SD.Role_Admin)){
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
+                      <div class="dropdown-menu">
+                          <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                          <a class="dropdown-item" asp-area="Admin" asp-controller="CoverType" asp-action="Index">Cover Type</a>                      
+                          <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>                      
+                          <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>                      
+                      </div>
+                    </li>
+                }
                 
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
-                  <div class="dropdown-menu">
-                      <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
-                      <a class="dropdown-item" asp-area="Admin" asp-controller="CoverType" asp-action="Index">Cover Type</a>                      
-                      <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>                      
-                      <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>                      
-                  </div>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Order</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                        <i class="bi bi-cart"></i>
+                        @await Component.InvokeAsync("ShoppingCart")
                     </a>
-                </li>
+                </li>  
               </ul>
               <partial name="_LoginPartial" />
               @*<form class="d-flex">
